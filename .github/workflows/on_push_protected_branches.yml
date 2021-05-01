@@ -42,7 +42,7 @@ jobs:
         uses: gandarez/changelog-action@v1.0.3
         id: changelog
         with:
-          current_tag: ${ GITHUB_SHA }
+          current_tag: ${{ github.sha }}
           previous_tag: ${{ steps.semver-tag.outputs.previous_matching_tag }}
           exclude: |
             ^Merge pull request .*
