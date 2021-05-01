@@ -38,24 +38,11 @@ jobs:
         uses: gandarez/semver-action@3-branches
         with:
           debug: true
-      - name: "Create tag locally"
-        run: git tag ${{ steps.semver-tag.outputs.semver_tag }}
-      - name: "Create tag"
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/${{ steps.semver-tag.outputs.semver_tag }}",
-              sha: context.sha
-            })
       - name: Changelog
-        uses: gandarez/changelog-action@v1.0.2
+        uses: gandarez/changelog-action@v1.0.3
         id: changelog
         with:
-          current_tag: ${{ steps.semver-tag.outputs.semver_tag }}
+          current_tag: ${ GITHUB_SHA }
           previous_tag: ${{ steps.semver-tag.outputs.previous_matching_tag }}
           exclude: |
             ^Merge pull request .*
