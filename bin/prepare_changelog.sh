@@ -61,7 +61,7 @@ case $branch in
         slack_output_for_develop
         replace_for_release
         ;;
-    release)
+    master)
         parse_for_release
         [ -z "$changelog" ] && exit 1
         clean_up
