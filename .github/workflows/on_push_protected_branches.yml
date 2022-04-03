@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
       - name: "Calculate semver tag"
         id: semver-tag
-        uses: gandarez/semver-action@3-branches
+        uses: wakatime/semver-action@master
         with:
           debug: true
       -
