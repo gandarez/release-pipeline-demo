@@ -6,3 +6,4 @@ Release pipeline demo
 
 - Add more tests
 - Deploy to ECS
+- Test
