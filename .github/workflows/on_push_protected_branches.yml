@@ -58,10 +58,19 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       -
+        # Run only for master branch
+        if: ${{ github.ref == 'refs/heads/master' }}
+        name: Clean up PR body
+        id: clean-up
+        run: |
+          changelog="${steps.changelog-release.outputs.pr_body//`/'\\\`'}"
+          echo "::set-output name=changelog::${changelog}"
+      -
         name: Prepare changelog
         id: changelog
         run: |
-          ./bin/prepare_changelog.sh $(echo ${GITHUB_REF#refs/heads/}) "${{ steps.changelog-develop.outputs.changelog || steps.changelog-release.outputs.pr_body }}"
+          changelog="${{ steps.changelog-develop.outputs.changelog || steps.clean-up.outputs.changelog }}"
+          ./bin/prepare_changelog.sh $(echo ${GITHUB_REF#refs/heads/}) "$changelog"
       - run: echo "${{ steps.changelog.outputs.slack }}"
       - name: "Create Release"
         uses: softprops/action-gh-release@master
