@@ -61,8 +61,7 @@ jobs:
         name: Prepare changelog
         id: changelog
         run: |
-          changelog="${{ steps.changelog-develop.outputs.changelog || steps.changelog-release.outputs.pr_body }}"
-          ./bin/prepare_changelog.sh $(echo ${GITHUB_REF#refs/heads/}) "$changelog"
+          ./bin/prepare_changelog.sh $(echo ${GITHUB_REF#refs/heads/}) "${{ steps.changelog-develop.outputs.changelog || steps.changelog-release.outputs.pr_body }}"
       - run: echo "${{ steps.changelog.outputs.slack }}"
       - name: "Create Release"
         uses: softprops/action-gh-release@master
