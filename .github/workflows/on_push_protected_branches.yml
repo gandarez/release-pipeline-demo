@@ -63,12 +63,13 @@ jobs:
         run: |
           changelog="${{ steps.changelog-develop.outputs.changelog || steps.changelog-release.outputs.pr_body }}"
           ./bin/prepare_changelog.sh $(echo ${GITHUB_REF#refs/heads/}) "$changelog"
+      - run: echo "${{ steps.changelog.outputs.slack }}"
       - name: "Create Release"
         uses: softprops/action-gh-release@master
         with:
           name: ${{ steps.semver-tag.outputs.semver_tag }}
           tag_name: ${{ steps.semver-tag.outputs.semver_tag }}
-          body: "## Changelog\n${{ steps.changelog.outputs.pr_body }}"
+          body: "## Changelog\n${{ steps.changelog.outputs.changelog }}"
           prerelease: ${{ steps.semver-tag.outputs.is_prerelease }}
           draft: false
         env:
