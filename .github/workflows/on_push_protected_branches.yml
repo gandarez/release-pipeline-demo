@@ -63,7 +63,7 @@ jobs:
         name: Clean up PR body
         id: clean-up
         run: |
-          changelog="${steps.changelog-release.outputs.pr_body//`/'\\\`'}"
+          changelog="$(tr '`' '\`' <<< ${steps.changelog-release.outputs.pr_body})"
           echo "::set-output name=changelog::${changelog}"
       -
         name: Prepare changelog
