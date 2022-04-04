@@ -24,11 +24,11 @@ replace_for_release() {
     changelog="${changelog//$'\r'/'%0D'}"
 }
 
-replace_for_slack() {
-    slack="${slack//'%'/'%25'}"
-    slack="${slack//$'\n'/'%0A'}"
-    slack="${slack//$'\r'/'%0D'}"
-}
+# replace_for_slack() {
+#     slack="${slack//'%'/'%25'}"
+#     slack="${slack//$'\n'/'%0A'}"
+#     slack="${slack//$'\r'/'%0D'}"
+# }
 
 slack_output_for_develop() {
     local IFS=$'\n' # make newlines the only separator
@@ -46,10 +46,10 @@ slack_output_for_release() {
     local temp=
     for j in ${changelog}
     do
-        temp="${temp}${j}\n"
+        temp="${temp}${j}%0A"
     done
 
-    slack="*Changelog*\n${temp}"
+    slack="*Changelog*%0A${temp}"
 }
 
 parse_for_develop() {
@@ -73,7 +73,7 @@ case $branch in
         clean_up
         slack_output_for_release
         replace_for_release
-        replace_for_slack
+        # replace_for_slack
         ;;
     *) exit 1 ;;
 esac
