@@ -1,0 +1,35 @@
+name: Tests
+
+on: pull_request
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Lint allowed branch names
+        uses: lekterable/branchlint-action@1.2.0
+        with:
+          allowed: |
+            /^(.+:)?bugfix/.+/i
+            /^(.+:)?docs?/.+/i
+            /^(.+:)?feature/.+/i
+            /^(.+:)?hotfix/.+/i
+            /^(.+:)?major/.+/i
+            /^(.+:)?misc/.+/i
+            /^(.+:)?develop$/i
+      -
+        name: Block fixup/squash commits
+        uses: xt0rted/block-autosquash-commits-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      -
+        # Run only for release branch
+        if: ${{ github.base_ref == 'master' }}
+        name: Check for changelog pattern
+        uses: Talentia-Software-OSS/check-pr-comments-action@v0.0.3
+        with:
+          comments-must-contain: 'Changelog:'
+          comments-must-not-contain: '`'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
