@@ -30,19 +30,23 @@ jobs:
     needs: test
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: "Calculate semver tag"
         id: semver-tag
         uses: wakatime/semver-action@master
         with:
+          prefix: v
+          branching_model: "git-flow"
+          prerelease_id: alpha
+          main_branch_name: master
           debug: true
       -
         # Run only for develop branch
         if: ${{ github.ref == 'refs/heads/develop' }}
         name: Changelog for develop
-        uses: gandarez/changelog-action@v1.0.4
+        uses: gandarez/changelog-action@v1.4.0
         id: changelog-develop
         with:
           current_tag: ${{ github.sha }}
@@ -53,7 +57,7 @@ jobs:
         # Run only for master branch
         if: ${{ github.ref == 'refs/heads/master' }}
         name: Get related pull request
-        uses: 8BitJonny/gh-get-current-pr@2.0.0
+        uses: 8BitJonny/gh-get-current-pr@3.0.0
         id: changelog-release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
